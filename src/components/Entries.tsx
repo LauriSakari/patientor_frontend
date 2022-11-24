@@ -18,25 +18,25 @@ const Entries = (props: EntriesProps) => {
 
   const EntryDetails: React.FC<{ entry: Entry }> = ({ entry }) => {
     switch (entry.type) {
-      case "Hospital":
-        return <HospitalEntryComponent  {...entry}/>;
-      case "OccupationalHealthcare": 
-        return <OccupationalHealthcareEntryComponent {...entry}/>;
-      case "HealthCheck":
-        return <HealthCheckEntry {...entry}/>;
-      default:
-        return assertNever(entry);
+    case "Hospital":
+      return <HospitalEntryComponent  {...entry}/>;
+    case "OccupationalHealthcare":
+      return <OccupationalHealthcareEntryComponent {...entry}/>;
+    case "HealthCheck":
+      return <HealthCheckEntry {...entry}/>;
+    default:
+      return assertNever(entry);
     }
   };
 
   const propsArray = (Object.values(props));
 
   return (
-<div>
-  {propsArray.map(entry =>
-    <EntryDetails key={entry.id} entry={entry} />
-  )}
-</div>
+    <div>
+      {propsArray.map(entry =>
+        <EntryDetails key={entry.id} entry={entry} />
+      )}
+    </div>
   );
 };
 

@@ -15,46 +15,46 @@ import { Patient } from "../types";
 
 
 const genderIs = (gender: string) => {
-    if (gender === "male") {
-        return <MaleIcon/>;
-    } 
-    if (gender === "female") {
-        return <FemaleIcon/>;
-    }
-    if (gender === "other") {
-        return <></>;
-    }
-  };
+  if (gender === "male") {
+    return <MaleIcon/>;
+  }
+  if (gender === "female") {
+    return <FemaleIcon/>;
+  }
+  if (gender === "other") {
+    return <></>;
+  }
+};
 
 const isString = (id: unknown): id is string => {
-    return typeof id === 'string' || id instanceof String;
-  };
+  return typeof id === 'string' || id instanceof String;
+};
 
 const SinglePatientPage = () => {
-    
-    const { id } = useParams<{ id: string }>();
-    if (!id || !isString(id)) {
-        throw new Error('Error: no patient found');
-    }
-    const [, dispatch] = useStateValue();
 
-    const contextState = useContext(StateContext);
+  const { id } = useParams<{ id: string }>();
+  if (!id || !isString(id)) {
+    throw new Error('Error: no patient found');
+  }
+  const [, dispatch] = useStateValue();
 
-    const patient = contextState[0].singlePatient;
-    
-    const [modalOpen, setModalOpen] = useState<boolean>(false);
-    const [error, setError] = useState<string>();
-  
-    const openModal = (): void => setModalOpen(true);
-  
-    const closeModal = (): void => {
-      setModalOpen(false);
-      setError(undefined);
-    };
+  const contextState = useContext(StateContext);
 
-    const submitNewEntry = async (values: EntryFormValues) => {
-      try {
-      const {data: patientWithAddedEntry} = await axios.post<Patient>
+  const patient = contextState[0].singlePatient;
+
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const [error, setError] = useState<string>();
+
+  const openModal = (): void => setModalOpen(true);
+
+  const closeModal = (): void => {
+    setModalOpen(false);
+    setError(undefined);
+  };
+
+  const submitNewEntry = async (values: EntryFormValues) => {
+    try {
+      const { data: patientWithAddedEntry } = await axios.post<Patient>
       (`${apiBaseUrl}/patients/${id}/entries`, values);
       dispatch(addNewEntry(patientWithAddedEntry));
       closeModal();
@@ -67,52 +67,52 @@ const SinglePatientPage = () => {
         setError("Unknown error");
       }
     }
-    };
-    
+  };
 
-    useEffect(() => {
-      if (!contextState[0].singlePatient[id] ) {
+
+  useEffect(() => {
+    if (!contextState[0].singlePatient[id] ) {
       void fetchPatient(id);
-      }
-    },[]);
+    }
+  },[]);
 
-    const fetchPatient = async (id: string) => {
-      try {
-       const { data: patientFromApi } = await axios.get<Patient>(
+  const fetchPatient = async (id: string) => {
+    try {
+      const { data: patientFromApi } = await axios.get<Patient>(
         `${apiBaseUrl}/patients/${id}`
       );
       dispatch(setSinglePatient(patientFromApi));
-      } catch (e) {
-        console.error(e);
-        }
-    };
-
-    if (Object.values(patient).length === 0 || !patient[id]) {
-        return <p>loading...</p>;
+    } catch (e) {
+      console.error(e);
     }
-    
-
-    return <div>
-      <h1>Name: {patient[id].name} {genderIs(patient[id].gender)}</h1> 
-        <span>Ssn: {patient[id].ssn}</span> <br></br>
-        <span>Occupation: {patient[id].occupation}</span>
-      <h2>Entries</h2>
-        {patient[id].entries.length === 0 ?
-        <div style={noEntries}><>No entries</><br></br></div>
-        : <Entries {...patient[id].entries}/>}
-
-      <AddEntryModal
-        modalOpen={modalOpen}
-        onSubmit={submitNewEntry}
-        error={error}
-        onClose={closeModal}
-      />
-
-      <Button variant="contained" color="primary" onClick={openModal}>
-        Add New Entry
-      </Button>
-       </div>;
   };
+
+  if (Object.values(patient).length === 0 || !patient[id]) {
+    return <p>loading...</p>;
+  }
+
+
+  return <div>
+    <h1>Name: {patient[id].name} {genderIs(patient[id].gender)}</h1>
+    <span>Ssn: {patient[id].ssn}</span> <br></br>
+    <span>Occupation: {patient[id].occupation}</span>
+    <h2>Entries</h2>
+    {patient[id].entries.length === 0 ?
+      <div style={noEntries}><>No entries</><br></br></div>
+      : <Entries {...patient[id].entries}/>}
+
+    <AddEntryModal
+      modalOpen={modalOpen}
+      onSubmit={submitNewEntry}
+      error={error}
+      onClose={closeModal}
+    />
+
+    <Button variant="contained" color="primary" onClick={openModal}>
+        Add New Entry
+    </Button>
+  </div>;
+};
 
 
 export default SinglePatientPage;

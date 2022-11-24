@@ -40,7 +40,6 @@ const App = () => {
     void fetchPatientList();
     void fetchDiagnosesList();
   }, [dispatch]);
-  
 
   return (
     <div className="App">

@@ -6,19 +6,19 @@ import { entriesStyle } from "../styles";
 
 
 const OccupationalHealthcareEntryComponent = (entry: OccupationalHealthcareEntry) => {
-    
-    const contextState = useContext(StateContext);
 
-    const diagnosisArray = contextState[0].diagnoses;
+  const contextState = useContext(StateContext);
 
-    const getDiagnosis = (code: string): string | undefined=> {
-        const diagnosisObject = diagnosisArray.find(d => d.code === code);
-        const diagnosis = diagnosisObject?.name;
-        return diagnosis;
-      };
+  const diagnosisArray = contextState[0].diagnoses;
+
+  const getDiagnosis = (code: string): string | undefined => {
+    const diagnosisObject = diagnosisArray.find(d => d.code === code);
+    const diagnosis = diagnosisObject?.name;
+    return diagnosis;
+  };
 
 
-    return (
+  return (
     <div style={entriesStyle}>
       <span>{entry.date} <WorkIcon/> {entry.employerName}</span><br></br>
       <span> {entry.description} </span><br></br>
@@ -26,20 +26,20 @@ const OccupationalHealthcareEntryComponent = (entry: OccupationalHealthcareEntry
 
       {!entry.diagnosisCodes ?
         <></>
-      : <ul>
+        : <ul>
           {entry.diagnosisCodes?.map((code) => {
             const diagnosis = getDiagnosis(code);
-          return <li key={code}>{code} {diagnosis}</li>;
+            return <li key={code}>{code} {diagnosis}</li>;
           }
           )}
         </ul>
-        }
-      {!entry.sickLeave ? 
-      <></>
-      :<>
-      <span>Sickleave start date: {entry.sickLeave?.startDate}</span><br></br>
-      <span>Sickleave end date: {entry.sickLeave?.endDate}</span>
-      </>}
+      }
+      {!entry.sickLeave ?
+        <></>
+        :<>
+          <span>Sickleave start date: {entry.sickLeave?.startDate}</span><br></br>
+          <span>Sickleave end date: {entry.sickLeave?.endDate}</span>
+        </>}
     </div>);
 };
 
