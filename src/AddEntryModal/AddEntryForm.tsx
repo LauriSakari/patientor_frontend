@@ -37,6 +37,7 @@ interface Props {
       validate={(values) => {
         
         const requiredError = "Field is required";
+        const malformattedDate = "Fill in date as \"YYYY-MM-DD\"";
         const errors: { [field: string]: string } = {};
         if (!values.healthCheckRating) {
           errors.name = requiredError;
@@ -49,6 +50,9 @@ interface Props {
         }
         if (!values.date) {
           errors.date = requiredError;
+        }
+        if (!Date.parse(values.date)) {
+          errors.date = malformattedDate;
         }
         return errors;
       }}
